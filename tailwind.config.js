@@ -17,6 +17,6 @@ module.exports = {
     },
   },
   plugins: [
-    flowbite.content(),
+    flowbite.plugin(),
   ],
 };
