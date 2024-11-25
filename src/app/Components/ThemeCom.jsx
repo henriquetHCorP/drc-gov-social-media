@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 export default function ThemeCom({children}) {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
-    console.log('themee:', theme); 
+    
     // useEffect(() => {
     //   setMounted(true); 
     //   // when the page is completely loaded setMounted to true
@@ -17,7 +17,6 @@ export default function ThemeCom({children}) {
       return (
     <div className={theme}>
         <div className="bg-white text-gray-700 dark:text-gray-200 dark:bg-gray-900 min-h-screen">
-        
             {children}
         </div>
     
