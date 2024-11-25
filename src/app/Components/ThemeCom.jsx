@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 export default function ThemeCom({children}) {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
-    console.log('theme:', theme); 
+    console.log('themee:', theme); 
     // useEffect(() => {
     //   setMounted(true); 
     //   // when the page is completely loaded setMounted to true
