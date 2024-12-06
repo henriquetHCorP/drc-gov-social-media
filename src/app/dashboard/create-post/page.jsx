@@ -1,5 +1,6 @@
 "use client"; 
 
+import { app } from '@/firebase';
 import { useUser } from '@clerk/nextjs'; 
 import { TextInput, Select, FileInput, Button } from 'flowbite-react';
 
@@ -10,6 +11,18 @@ const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 //https://dev.to/a7u/reactquill-with-nextjs-478b
 import 'react-quill-new/dist/quill.snow.css';  
 
+import {
+getDownloadURL,
+getStorage, 
+ref,
+uploadBytesResumable
+
+} from 'firebase/storage'; 
+import { useState } from 'react';
+
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
 export default function CreatePostPage() {
     const {isSignedIn, user, isLoaded} = useUser(); 
 
@@ -17,6 +30,42 @@ export default function CreatePostPage() {
     const [imageUploadProgress, setImageUploadProgress] = useState(null); 
     const [imageUploadError, setImageUploadError] = useState(null); 
     const [formData, setFormData] = useState({}); 
+
+    const handleUploadImage = async () => {
+      try {
+        if(!file) {
+            setImageUploadError('Please select an image'); 
+            return; 
+        }
+        setImageUploadError(null);
+        const storage = getStorage(app); 
+        const fileName = new Date().getTime() + '-' + file.name; 
+        const storageRef = ref(storage, fileName); 
+        const uploadTask = uploadBytesResumable(storageRef, fileName); 
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100; 
+             setImageUploadProgress(progress.toFixed(0)); 
+          }, 
+          (error) => {
+            setImageUploadError('Image upload failed'); 
+            setImageUploadProgress(null); 
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              setImageUploadProgress(null); 
+              setImageUploadError(null);
+              setFormData({...formData, image: downloadURL}); 
+            }); 
+          }
+        );
+      } catch(error){
+        setImageUploadError('Image upload failed'); 
+        setImageUploadProgress(null); 
+        console.log(error); 
+      }
+    }; 
 
     if(!isLoaded) {
         return null;
@@ -47,15 +96,20 @@ export default function CreatePostPage() {
                     </Select>
                </div>
                <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
-                <FileInput type='file' accept='image/*' />
+                <FileInput 
+                   type='file' 
+                   accept='image/*' 
+                   onChange={(e)=>setFile(e.target.files[0])}
+                   />
                 <Button
                   type='button'
                   gradientDuoTone='purpleToBlue'
                   size='sm'
                   outline
+                  onClick={handleUploadImage}
+                  disabled={imageUploadProgress}
                 >
-                    
-                    Upload</Button>
+                    Upload Image</Button>
                </div>
 
                <ReactQuill 
