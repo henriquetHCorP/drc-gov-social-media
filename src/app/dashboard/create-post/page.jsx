@@ -2,7 +2,7 @@
 
 import { app } from '@/firebase';
 import { useUser } from '@clerk/nextjs'; 
-import { TextInput, Select, FileInput, Button } from 'flowbite-react';
+import { TextInput, Select, FileInput, Button, Alert } from 'flowbite-react';
 
 // reactquill only work on  client side and this page is firstly loaded a server side so we need to import it into a different way; 
 import dynamic from 'next/dynamic'; 
@@ -41,7 +41,7 @@ export default function CreatePostPage() {
         const storage = getStorage(app); 
         const fileName = new Date().getTime() + '-' + file.name; 
         const storageRef = ref(storage, fileName); 
-        const uploadTask = uploadBytesResumable(storageRef, fileName); 
+        const uploadTask = uploadBytesResumable(storageRef, file); 
         uploadTask.on(
           'state_changed',
           (snapshot) => {
@@ -66,6 +66,7 @@ export default function CreatePostPage() {
         console.log(error); 
       }
     }; 
+    
 
     if(!isLoaded) {
         return null;
@@ -109,9 +110,28 @@ export default function CreatePostPage() {
                   onClick={handleUploadImage}
                   disabled={imageUploadProgress}
                 >
-                    Upload Image</Button>
+                    {imageUploadProgress ? (
+                      <div className="w-16 h-16">
+                        <CircularProgressbar
+                          value={imageUploadProgress}
+                          text={`${imageUploadProgress || 0}%`}
+                        />
+                      </div>
+                    ) : (
+                      'Upload Image'
+                    )}
+                    </Button>
                </div>
-
+               {imageUploadError && (
+                <Alert color='failure'>{imageUploadError}</Alert>
+               )}
+                   {formData.image && (
+                    <img
+                       src={formData.image}
+                       alt='upload'
+                       className='w-full h-72 object-cover'
+                    /> 
+                   )}
                <ReactQuill 
                  theme="snow"
                  placeholder="Write something..."
