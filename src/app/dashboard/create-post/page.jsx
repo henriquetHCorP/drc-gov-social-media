@@ -13,6 +13,11 @@ import 'react-quill-new/dist/quill.snow.css';
 export default function CreatePostPage() {
     const {isSignedIn, user, isLoaded} = useUser(); 
 
+    const [file, setFile] = useState(null); 
+    const [imageUploadProgress, setImageUploadProgress] = useState(null); 
+    const [imageUploadError, setImageUploadError] = useState(null); 
+    const [formData, setFormData] = useState({}); 
+
     if(!isLoaded) {
         return null;
         // the if statement above here will fix the error related to "only plain object should be added..." }
