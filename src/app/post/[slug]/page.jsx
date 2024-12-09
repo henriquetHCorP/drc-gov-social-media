@@ -1,4 +1,5 @@
  import CallToAction from '@/app/components/CallToAction'; 
+import RecentPosts from '@/app/Components/RecentPosts';
  import { Button } from 'flowbite-react'; 
 import Link from 'next/link';
 
@@ -59,6 +60,7 @@ import Link from 'next/link';
              <div className="max-w-4xl mx-auto w-full">
                 <CallToAction /> 
              </div>
+             <RecentPosts limit={3}/>
         </main>
     ); 
  }
