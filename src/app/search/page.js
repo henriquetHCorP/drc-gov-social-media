@@ -5,7 +5,8 @@
 import { Button, Select, TextInput } from 'flowbite-react'; 
 import { useEffect, useState } from 'react'; 
 import { useRouter, useSearchParams } from 'next/navigation'; 
-import PostCard from '../components/PostCard';
+import PostCard from '../Components/PostCard';
+
 export default function Search() {
     const [sidebarData, setSidebarData] = useState({
         searchTerm:'', 

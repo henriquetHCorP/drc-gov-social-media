@@ -1,4 +1,5 @@
- import CallToAction from '@/app/components/CallToAction'; 
+ 
+import CallToAction from '@/app/Components/CallToAction';
 import RecentPosts from '@/app/Components/RecentPosts';
  import { Button } from 'flowbite-react'; 
 import Link from 'next/link';
