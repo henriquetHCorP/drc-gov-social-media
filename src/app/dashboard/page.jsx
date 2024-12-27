@@ -1,12 +1,14 @@
  'use client';
 
 import { useEffect, useState } from 'react';
-import DashSidebar from '../components/DashSidebar';
-import DashProfile from '../components/DashProfile';
+import DashSidebar from '../Components/DashSidebar';
+import DashProfile from '../Components/DashProfile';
 import { useSearchParams } from 'next/navigation';
-import DashPosts from '../components/DashPosts';
-import DashUsers from '../components/DashUsers';
-import DashboardComp from '../components/DashboardComp';
+import DashPosts from '../Components/DashPosts';
+import DashUsers from '../Components/DashUsers';
+import DashboardComp from '../Components/DashboardComp';
+
+
 export default function Dashboard() {
   const searchParams = useSearchParams();
   const [tab, setTab] = useState('');
